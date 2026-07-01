@@ -934,36 +934,6 @@
         navigator.serviceWorker.register('sw.js').catch(console.error);
       });
     }
-
-    /* DEBUG TEMPORANEO: indicatore installabilità PWA */
-    (function() {
-      const badge = document.createElement('div');
-      badge.style.cssText = 'position:fixed;bottom:10px;left:10px;right:10px;z-index:99999;background:#1e293b;color:#fbbf24;padding:10px;border-radius:10px;font-size:13px;font-family:sans-serif;border:1px solid #334155;';
-      badge.textContent = '⏳ In attesa di beforeinstallprompt...';
-      document.body.appendChild(badge);
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        badge.style.color = '#4ade80';
-        badge.textContent = '✅ beforeinstallprompt RICEVUTO! Il sito è installabile.';
-        window.__deferredPrompt = e;
-      });
-      window.addEventListener('appinstalled', () => {
-        badge.textContent = '🎉 App installata!';
-      });
-      let secs = 0;
-      const interval = setInterval(() => {
-        secs += 5;
-        if (window.__deferredPrompt) { clearInterval(interval); return; }
-        badge.style.color = '#fbbf24';
-        badge.textContent = `⏳ In attesa di beforeinstallprompt... (${secs}s) — interagisci con la pagina (scroll, tocchi)`;
-        if (secs >= 60) {
-          clearInterval(interval);
-          badge.style.color = '#f87171';
-          badge.textContent = '❌ beforeinstallprompt NON ricevuto dopo 60s di interazione.';
-        }
-      }, 5000);
-    })();
-    /* FINE DEBUG TEMPORANEO */
   </script>
 </body>
 </html>
