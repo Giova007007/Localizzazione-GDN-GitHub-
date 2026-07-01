@@ -950,10 +950,16 @@
       window.addEventListener('appinstalled', () => {
         badge.textContent = '🎉 App installata!';
       });
-      setTimeout(() => {
-        if (!window.__deferredPrompt) {
+      let secs = 0;
+      const interval = setInterval(() => {
+        secs += 5;
+        if (window.__deferredPrompt) { clearInterval(interval); return; }
+        badge.style.color = '#fbbf24';
+        badge.textContent = `⏳ In attesa di beforeinstallprompt... (${secs}s) — interagisci con la pagina (scroll, tocchi)`;
+        if (secs >= 60) {
+          clearInterval(interval);
           badge.style.color = '#f87171';
-          badge.textContent = '❌ beforeinstallprompt NON ricevuto dopo 5s.';
+          badge.textContent = '❌ beforeinstallprompt NON ricevuto dopo 60s di interazione.';
         }
       }, 5000);
     })();
